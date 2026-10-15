@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Vượt Link Tự Động</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 90%; max-width: 450px; text-align: center; }
+        h1 { font-size: 22px; color: #38bdf8; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; box-sizing: border-box; margin-bottom: 15px; font-size: 14px; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #0284c7; color: white; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.2s; }
+        button:hover { background: #0369a1; }
+        #result { margin-top: 20px; word-break: break-all; padding: 10px; border-radius: 6px; background: #0f172a; min-height: 40px; }
+        a { color: #4ade80; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>⚡ VƯỢT LINK TỰ ĐỘNG</h1>
+    <input type="text" id="linkInput" placeholder="Dán link cần vượt vào đây...">
+    <button onclick="handleBypass()">Gửi Yêu Cầu Vượt Link</button>
+    
+    <div id="result">Kết quả sẽ hiển thị ở đây...</div>
+</div>
+
+<script>
+async function handleBypass() {
+    const input = document.getElementById("linkInput").value.trim();
+    const resultDiv = document.getElementById("result");
+
+    if (!input) {
+        resultDiv.innerHTML = "<span style='color: #ef4444;'>Vui lòng nhập link!</span>";
+        return;
+    }
+
+    resultDiv.innerHTML = "⏳ Đang xử lý vượt link...";
+
+    try {
+        // Gọi API giải mã link (Ví dụ kết nối API trung gian)
+        const apiUrl = `https://api.bypass.vip/bypass?url=${encodeURIComponent(input)}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.status === "success" || data.destination) {
+            const destUrl = data.destination || data.result;
+            resultDiv.innerHTML = `✅ Thành công! <br><a href="${destUrl}" target="_blank">Bấm vào đây để đến trang gốc</a>`;
+        } else {
+            resultDiv.innerHTML = "<span style='color: #ef4444;'>Không thể vượt link này hoặc server bận!</span>";
+        }
+    } catch (err) {
+        resultDiv.innerHTML = "<span style='color: #ef4444;'>Lỗi kết nối đến dịch vụ bypass!</span>";
+    }
+}
+</script>
+
+</body>
+</html>
